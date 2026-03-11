@@ -1,6 +1,7 @@
 import { getPostBySlug, getAllPosts } from '@/lib/posts';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -22,25 +23,67 @@ export default async function PostPage({ params }: Props) {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <Link href="/" style={{ color: '#666', textDecoration: 'none' }}>
-        ← 返回首页
-      </Link>
+    <div style={styles.container}>
+      <Link href="/" style={styles.backLink}>← 返回首页</Link>
       
-      <article style={{ marginTop: '2rem' }}>
-        <header style={{ marginBottom: '2rem' }}>
-          <span style={{ color: '#888', fontSize: '0.875rem' }}>{post.date}</span>
-          <h1 style={{ fontSize: '2rem', marginTop: '0.5rem' }}>{post.title}</h1>
+      <article style={styles.article}>
+        <header style={styles.header}>
+          <span style={styles.date}>{post.date}</span>
+          <h1 style={styles.title}>{post.title}</h1>
         </header>
         
-        <div style={{ lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
-          {post.content}
+        <div className="markdown-content">
+          <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
       </article>
 
-      <footer style={{ marginTop: '3rem', paddingTop: '1rem', borderTop: '1px solid #eee', color: '#888', fontSize: '0.875rem' }}>
+      <footer style={styles.footer}>
         <Link href="/">← 返回首页</Link>
       </footer>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '2rem',
+    minHeight: '100vh',
+  } as const,
+  backLink: {
+    color: '#666',
+    textDecoration: 'none',
+    fontSize: '0.9rem',
+    display: 'inline-block',
+    marginBottom: '1rem',
+  } as const,
+  article: {
+    background: '#fff',
+    padding: '2rem',
+    borderRadius: '12px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+  } as const,
+  header: {
+    marginBottom: '2rem',
+    paddingBottom: '1rem',
+    borderBottom: '1px solid #eee',
+  } as const,
+  date: {
+    color: '#888',
+    fontSize: '0.875rem',
+  } as const,
+  title: {
+    fontSize: '2rem',
+    marginTop: '0.5rem',
+    marginBottom: 0,
+    color: '#333',
+  } as const,
+  footer: {
+    marginTop: '2rem',
+    paddingTop: '1rem',
+    borderTop: '1px solid #eee',
+    color: '#888',
+    fontSize: '0.875rem',
+  } as const,
+};
